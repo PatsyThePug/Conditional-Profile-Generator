@@ -4,58 +4,317 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Tarjetas de Perfil - PatsyThePug</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom CSS for glass morphism and animations */
-        .glass-morphism {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-panel h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-field-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-field label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-field input, .form-field select {
+            width: 100%;
+            padding: 12px 15px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
-        
-        .gradient-bg {
-            background: linear-gradient(45deg, #F5239E, #AC35A2, #5C3DCB, #9CEE68, #34C1E9);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease infinite;
+
+        .form-field input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
-        
+
+        .form-field input:focus, .form-field select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+
+        .checkbox-field input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+
+        .card-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Profile Card Styles */
+        .widget {
+            width: 350px;
+            max-width: 350px;
+            height: 350px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+            backdrop-filter: blur(15px);
+            border-radius: 22px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .widget:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.08);
+            border: 2px solid rgba(52, 193, 233, 0.4);
+        }
+
+        .cover {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #F5239E 0%, #AC35A2 25%, #5C3DCB 50%, #9CEE68 75%, #34C1E9 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 10s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            display: none;
+        }
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        
-        .gradient-text {
-            background: linear-gradient(45deg, #F5239E, #AC35A2, #5C3DCB);
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(253, 197, 2, 0.1), rgba(50, 211, 191, 0.1));
+            backdrop-filter: blur(1px);
+        }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .widget:hover .cover img {
+            transform: scale(1.05);
+        }
+
+        .photo {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 4px solid white;
+            position: absolute;
+            top: 98px;
+            left: 50%;
+            transform: translateX(-50%);
+            object-fit: cover;
+            background: linear-gradient(135deg, #34C1E9, #5C3DCB);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(52, 193, 233, 0.3);
+            transition: all 0.3s ease;
+            background-image: url('https://i.postimg.cc/nhCmFFYc/ale.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .widget:hover .photo {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 0 0 4px rgba(52, 193, 233, 0.4);
+        }
+
+        .widget-no-cover .photo {
+            top: 30px;
+        }
+
+        .widget h1 {
+            text-align: center;
+            margin-top: 65px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2D3748;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 8px;
+        }
+
+        .widget-no-cover h1 {
+            margin-top: 125px;
+        }
+
+        .widget h2 {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #F5239E, #AC35A2, #5C3DCB);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            padding: 0 15px;
         }
-        
-        .profile-card {
-            width: 350px;
-            height: 350px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 22px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+
+        .widget h3 {
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #9CEE68, #34C1E9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
         }
-        
-        .profile-card:hover {
-            transform: translateY(-5px);
+
+        .widget ul {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            list-style: none;
+            padding: 0 20px;
         }
-        
-        .social-icon {
+
+        .widget ul.position-left {
+            justify-content: flex-start;
+        }
+
+        .widget ul.position-right {
+            justify-content: flex-end;
+        }
+
+        .widget ul li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 36px;
             height: 36px;
+            border-radius: 50%;
+            text-decoration: none;
+            color: white;
             font-size: 15px;
             transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
-        
-        .social-icon:hover {
-            transform: scale(1.2);
+
+        .widget ul li a:hover {
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .widget ul li a.twitter { background: linear-gradient(135deg, #1DA1F2, #0E7BBB); }
+        .widget ul li a.github { background: linear-gradient(135deg, #333, #24292e); }
+        .widget ul li a.linkedin { background: linear-gradient(135deg, #0077B5, #005582); }
+        .widget ul li a.instagram { background: linear-gradient(135deg, #E4405F, #C13584); }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .widget {
+                width: 320px;
+                height: 320px;
+            }
+            
+            .photo {
+                width: 75px;
+                height: 75px;
+            }
         }
     </style>
 </head>
@@ -191,9 +450,9 @@
                             </div>
                         </div>
                         
-                        <h1 id="fullName" class="text-2xl font-bold text-white mb-2">Tu Nombre</h1>
-                        <h2 id="roleText" class="text-lg gradient-text font-medium mb-2">Tu Profesión</h2>
-                        <h3 id="locationText" class="text-sm gradient-text">Tu Ubicación</h3>
+                        <h1 id="fullName" class="text-2xl font-bold text-white mb-2">Your Name</h1>
+                        <h2 id="roleText" class="text-lg gradient-text font-medium mb-2">Your Role</h2>
+                        <h3 id="locationText" class="text-sm gradient-text">Your Location</h3>
                     </div>
                 </div>
             </div>
@@ -203,11 +462,11 @@
     <script>
         // Profile card update functionality
         function updateProfileCard() {
-            const name = document.getElementById('name').value || 'Tu';
-            const lastName = document.getElementById('lastName').value || 'Nombre';
-            const role = document.getElementById('role').value || 'Tu Profesión';
-            const city = document.getElementById('city').value || 'Tu';
-            const country = document.getElementById('country').value || 'Ubicación';
+            const name = document.getElementById('name').value || 'Your';
+            const lastName = document.getElementById('lastName').value || 'Name';
+            const role = document.getElementById('role').value || 'Your Role';
+            const city = document.getElementById('city').value || 'Your';
+            const country = document.getElementById('country').value || 'Location';
             const avatarURL = document.getElementById('avatarURL').value;
             const background = document.getElementById('background').value;
             const github = document.getElementById('github').value;
@@ -248,60 +507,49 @@
             const socialIcons = document.getElementById('socialIcons');
             socialIcons.style.justifyContent = socialMediaPosition ? 'flex-end' : 'center';
             
-            // Show/hide GitHub
-            const githubIcon = document.getElementById('githubIcon');
+            document.getElementById('githubIcon').style.display = github ? 'flex' : 'none';
+            document.getElementById('twitterIcon').style.display = twitter ? 'flex' : 'none';
+            document.getElementById('linkedinIcon').style.display = linkedin ? 'flex' : 'none';
+            document.getElementById('instagramIcon').style.display = instagram ? 'flex' : 'none';
+            
+            // Add click handlers for social icons
             if (github) {
-                githubIcon.style.display = 'flex';
-                githubIcon.onclick = () => window.open(`https://github.com/${github}`, '_blank');
-            } else {
-                githubIcon.style.display = 'none';
+                document.getElementById('githubIcon').onclick = () => window.open(`https://github.com/${github}`);
             }
-            
-            // Show/hide Twitter
-            const twitterIcon = document.getElementById('twitterIcon');
             if (twitter) {
-                twitterIcon.style.display = 'flex';
-                twitterIcon.onclick = () => window.open(`https://twitter.com/${twitter}`, '_blank');
-            } else {
-                twitterIcon.style.display = 'none';
+                document.getElementById('twitterIcon').onclick = () => window.open(`https://twitter.com/${twitter}`);
             }
-            
-            // Show/hide LinkedIn
-            const linkedinIcon = document.getElementById('linkedinIcon');
             if (linkedin) {
-                linkedinIcon.style.display = 'flex';
-                linkedinIcon.onclick = () => window.open(`https://linkedin.com/in/${linkedin}`, '_blank');
-            } else {
-                linkedinIcon.style.display = 'none';
+                document.getElementById('linkedinIcon').onclick = () => window.open(`https://linkedin.com/in/${linkedin}`);
             }
-            
-            // Show/hide Instagram
-            const instagramIcon = document.getElementById('instagramIcon');
             if (instagram) {
-                instagramIcon.style.display = 'flex';
-                instagramIcon.onclick = () => window.open(`https://instagram.com/${instagram}`, '_blank');
-            } else {
-                instagramIcon.style.display = 'none';
+                document.getElementById('instagramIcon').onclick = () => window.open(`https://instagram.com/${instagram}`);
             }
         }
         
-        // Add event listeners to all inputs
-        document.getElementById('name').addEventListener('input', updateProfileCard);
-        document.getElementById('lastName').addEventListener('input', updateProfileCard);
-        document.getElementById('role').addEventListener('input', updateProfileCard);
-        document.getElementById('city').addEventListener('input', updateProfileCard);
-        document.getElementById('country').addEventListener('input', updateProfileCard);
-        document.getElementById('avatarURL').addEventListener('input', updateProfileCard);
-        document.getElementById('background').addEventListener('input', updateProfileCard);
-        document.getElementById('github').addEventListener('input', updateProfileCard);
-        document.getElementById('twitter').addEventListener('input', updateProfileCard);
-        document.getElementById('linkedin').addEventListener('input', updateProfileCard);
-        document.getElementById('instagram').addEventListener('input', updateProfileCard);
-        document.getElementById('includeCover').addEventListener('change', updateProfileCard);
-        document.getElementById('socialMediaPosition').addEventListener('change', updateProfileCard);
-        
-        // Initialize
-        updateProfileCard();
+        // Add event listeners to all form fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateProfileCard);
+                input.addEventListener('change', updateProfileCard);
+            });
+            
+            // Set sample data
+            document.getElementById('name').value = 'Alejandra';
+            document.getElementById('lastName').value = 'Bárcena';
+            document.getElementById('role').value = '💻 Desarrolladora Web • 🎨 Diseñadora • 🔍 Coolhunter';
+            document.getElementById('city').value = 'Madrid';
+            document.getElementById('country').value = 'Spain';
+            document.getElementById('github').value = 'PatsyThePug';
+            document.getElementById('twitter').value = 'patsythepug';
+            document.getElementById('linkedin').value = 'alejandra-barcena';
+            document.getElementById('instagram').value = 'patsythepug';
+            document.getElementById('includeCover').checked = true;
+            
+            // Initial update
+            updateProfileCard();
+        });
     </script>
 </body>
 </html>
