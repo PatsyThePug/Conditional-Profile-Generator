@@ -9,6 +9,7 @@ Diseñado para demostrar estructuras condicionales en JavaScript.
 
 ![Vista previa del proyecto](https://github.com/PatsyThePug/Conditional-Profile-Generator/blob/main/vistaprevia.png)
 
+
 ---
 
 ## 🚀 ¿Cómo usarlo?
@@ -53,3 +54,9 @@ Abre en tu navegador:
 git add README.md
 git commit -m "📝 Actualizar README con imagen 'vistaprevia.png'"
 git push origin main
+
+
+## 🌐 Ver Proyecto en Línea
+
+👉 [Haz clic aquí para ver el generador en acción](https://PatsyThePug.github.io/Conditional-Profile-Generator/)
+
